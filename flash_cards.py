@@ -192,26 +192,7 @@ def code(card_id=None):
 
 
 def memorize(card_type, card_id):
-    if card_type == "general":
-        type = 1
-    elif card_type == "code":
-        type = 2
-    else:
-        return redirect(url_for('cards'))
-
-    if card_id:
-        card = get_card_by_id(card_id)
-    else:
-        card = get_card(type)
-    if not card:
-        flash("You've learned all the " + card_type + " cards.")
-        return redirect(url_for('cards'))
-    short_answer = (len(card['back']) < 75)
-    return render_template('memorize.html',
-                           card=card,
-                           card_type=card_type,
-                           short_answer=short_answer)
-
+    return redirect(url_for('cards'))
 
 def get_card(type):
     db = get_db()

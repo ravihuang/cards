@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-    <title>CS Flash Cards</title>
+    <title>TesterQ Flash Cards</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
           integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
@@ -17,15 +17,13 @@
                 <br/>
                 <nav class="navbar navbar-default">
                     <div class="navbar-header">
-                        <a class="navbar-brand" href="{{ url_for('index') }}">CS Flash Cards</a>
+                        <a class="navbar-brand" href="{{ url_for('index') }}">TesterQ Flash Cards</a>
 
                         <ul class="nav navbar-nav navbar-right">
                             {% if not session.logged_in %}
                                 <li><a href="{{ url_for('login') }}">log in</a></li>
                             {% else %}
-                                <li><a href="{{ url_for('cards') }}">cards</a></li>
                                 <li><a href="{{ url_for('general') }}">general</a></li>
-                                <li><a href="{{ url_for('code') }}">code</a></li>
                                 <li>&nbsp;&nbsp;&nbsp;&nbsp;</li>
                                 <li><a href="{{ url_for('logout') }}">log out</a></li>
                             {% endif %}
