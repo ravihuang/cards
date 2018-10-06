@@ -37,7 +37,7 @@ def get_db():
     """
     if not hasattr(g, 'mysql_db'):
         g.mysql_db = connect_db()
-    return g.mysql_db
+    return g.mysql_db.cursor()
 
 
 @app.teardown_appcontext

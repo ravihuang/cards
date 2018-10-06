@@ -1,4 +1,4 @@
-FROM python:3.5
+FROM python:3.5.6-alpine
 MAINTAINER Ravi.Huang <ravi.huang@gmail.com>
 
 ADD . /src
