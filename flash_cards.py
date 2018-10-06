@@ -1,7 +1,6 @@
 import os
-import sqlite3
-from flask import Flask, request, session, g, redirect, url_for, abort, \
-    render_template, flash
+import pymysql
+from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -23,7 +22,7 @@ def _dict_factory(cursor, row):
     return d
 
 def connect_db():
-    rv = pymysql.connect("mysql","tquser","passwd","scott",charset="utf-8")
+    rv = pymysql.connect("mysql","tquser","passwd","testerq",charset="utf8")
     rv.row_factory = _dict_factory
     rv.cursor().execute("CREATE TABLE if not exists cards ( id integer primary key auto_increment, \
         type tinyint not null, \
