@@ -222,7 +222,7 @@ def get_card(type):
       WHERE
         type = ?
         and known = 0
-      ORDER BY RANDOM()
+      ORDER BY rand()
       LIMIT 1
     '''
 
