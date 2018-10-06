@@ -8,41 +8,44 @@ app.config.from_object(__name__)
 
 # Load default config and override config from an environment variable
 app.config.update(dict(
-    DATABASE=os.path.join(app.root_path, 'db', 'cards.db'),
     SECRET_KEY='development key',
     USERNAME='admin',
     PASSWORD='default'
 ))
 app.config.from_envvar('CARDS_SETTINGS', silent=True)
 
+def _dict_factory(cursor, row):
+    d = {}
+    d["id"] = row[0]
+    d["front"] = row[1]
+    d["back"] = row[2]
+    d["known"] = row[3]
+    return d
 
 def connect_db():
-    rv = sqlite3.connect(app.config['DATABASE'])
-    rv.row_factory = sqlite3.Row
+    rv = pymysql.connect("mysql","tquser","passwd","scott",charset="utf-8")
+    rv.row_factory = _dict_factory
+    rv.cursor().execute("CREATE TABLE if not exists cards ( id integer primary key auto_increment, \
+        type tinyint not null, \
+        front text not null, \
+        back text not null, \
+        known boolean default 0)")
     return rv
-
-
-def init_db():
-    db = get_db()
-    with app.open_resource('data/schema.sql', mode='r') as f:
-        db.cursor().executescript(f.read())
-    db.commit()
-
 
 def get_db():
     """Opens a new database connection if there is none yet for the
     current application context.
     """
-    if not hasattr(g, 'sqlite_db'):
-        g.sqlite_db = connect_db()
-    return g.sqlite_db
+    if not hasattr(g, 'mysql_db'):
+        g.mysql_db = connect_db()
+    return g.mysql_db
 
 
 @app.teardown_appcontext
 def close_db(error):
     """Closes the database again at the end of the request."""
-    if hasattr(g, 'sqlite_db'):
-        g.sqlite_db.close()
+    if hasattr(g, 'mysql_db'):
+        g.mysql_db.close()
 
 
 # -----------------------------------------------------------
