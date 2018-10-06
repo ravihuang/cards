@@ -28,7 +28,7 @@ def connect_db():
         type tinyint not null, \
         front text not null, \
         back text not null, \
-        known boolean default 0)")
+        known boolean default 0) DEFAULT CHARSET=utf8mb4")
     return rv
 
 def get_db():
@@ -37,7 +37,8 @@ def get_db():
     """
     if not hasattr(g, 'mysql_db'):
         g.mysql_db = connect_db()
-    return g.mysql_db.cursor()
+    cursor = g.mysql_db.cursor(pymysql.cursors.DictCursor)
+    return cursor
 
 
 @app.teardown_appcontext
@@ -76,7 +77,7 @@ def cards():
         ORDER BY id DESC
     '''
     cur = db.execute(query)
-    cards = cur.fetchall()
+    cards = db.fetchall()
     return render_template('cards.html', cards=cards, filter_name="all")
 
 
@@ -101,7 +102,7 @@ def filter_cards(filter_name):
     db = get_db()
     fullquery = "SELECT id, type, front, back, known FROM cards " + query + " ORDER BY id DESC"
     cur = db.execute(fullquery)
-    cards = cur.fetchall()
+    cards = db.fetchall()
     return render_template('cards.html', cards=cards, filter_name=filter_name)
 
 
@@ -110,12 +111,12 @@ def add_card():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
     db = get_db()
-    db.execute('INSERT INTO cards (type, front, back) VALUES (?, ?, ?)',
+    db.execute("INSERT INTO cards (type, front, back) VALUES (%s, %s,%s)",
                [request.form['type'],
                 request.form['front'],
                 request.form['back']
                 ])
-    db.commit()
+    g.mysql_db.commit()
     flash('New card was successfully added.')
     return redirect(url_for('cards'))
 
@@ -131,7 +132,7 @@ def edit(card_id):
         WHERE id = %s
     '''
     cur = db.execute(query, [card_id])
-    card = cur.fetchone()
+    card = db.fetchone()
     return render_template('edit.html', card=card)
 
 
@@ -226,8 +227,8 @@ def get_card(type):
       LIMIT 1
     '''
 
-    cur = db.execute(query, [type])
-    return cur.fetchone()
+    cur=db.execute(query, [type])
+    return db.fetchone()
 
 
 def get_card_by_id(card_id):
@@ -243,7 +244,7 @@ def get_card_by_id(card_id):
     '''
 
     cur = db.execute(query, [card_id])
-    return cur.fetchone()
+    return db.fetchone()
 
 
 @app.route('/mark_known/<card_id>/<card_type>')
