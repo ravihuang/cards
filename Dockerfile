@@ -1,10 +1,10 @@
 FROM python:3.5
-MAINTAINER Tinpee <tinpee.dev@gmail.com>
+MAINTAINER Ravi.Huang <ravi.huang@gmail.com>
 
 ADD . /src
 WORKDIR /src
 RUN pip install --upgrade pip \
-    && pip install flask gunicorn
+    && pip install flask gunicorn pymysql
 
 COPY entrypoint.sh /
 RUN chmod +x /entrypoint.sh
