@@ -128,7 +128,7 @@ def edit(card_id):
     query = '''
         SELECT id, type, front, back, known
         FROM cards
-        WHERE id = ?
+        WHERE id = %s
     '''
     cur = db.execute(query, [card_id])
     card = cur.fetchone()
@@ -145,11 +145,11 @@ def edit_card():
     command = '''
         UPDATE cards
         SET
-          type = ?,
-          front = ?,
-          back = ?,
-          known = ?
-        WHERE id = ?
+          type = %s,
+          front = '%s',
+          back = '%s',
+          known = %s
+        WHERE id = %s
     '''
     db.execute(command,
                [request.form['type'],
@@ -168,7 +168,7 @@ def delete(card_id):
     if not session.get('logged_in'):
         return redirect(url_for('login'))
     db = get_db()
-    db.execute('DELETE FROM cards WHERE id = ?', [card_id])
+    db.execute('DELETE FROM cards WHERE id = %s', [card_id])
     db.commit()
     flash('Card deleted.')
     return redirect(url_for('cards'))
@@ -220,7 +220,7 @@ def get_card(type):
         id, type, front, back, known
       FROM cards
       WHERE
-        type = ?
+        type = %s
         and known = 0
       ORDER BY rand()
       LIMIT 1
@@ -238,7 +238,7 @@ def get_card_by_id(card_id):
         id, type, front, back, known
       FROM cards
       WHERE
-        id = ?
+        id = %s
       LIMIT 1
     '''
 
@@ -251,7 +251,7 @@ def mark_known(card_id, card_type):
     if not session.get('logged_in'):
         return redirect(url_for('login'))
     db = get_db()
-    db.execute('UPDATE cards SET known = 1 WHERE id = ?', [card_id])
+    db.execute('UPDATE cards SET known = 1 WHERE id = %s', [card_id])
     db.commit()
     flash('Card marked as known.')
     return redirect(url_for(card_type))
