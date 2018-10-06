@@ -22,7 +22,7 @@ def _dict_factory(cursor, row):
     return d
 
 def connect_db():
-    rv = pymysql.connect("mysql","tquser","passwd","testerq",charset="utf8")
+    rv = pymysql.connect("mysql",os.environ['MYSQL_USER'],os.environ['MYSQL_PASSWORD'],os.environ['MYSQL_DATABASE'],charset="utf8")
     rv.row_factory = _dict_factory
     rv.cursor().execute("CREATE TABLE if not exists cards ( id integer primary key auto_increment, \
         type tinyint not null, \
