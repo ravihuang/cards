@@ -11,6 +11,9 @@ ADD . /src
 WORKDIR /src
 VOLUME /src/db
 
+FROM node:8
+RUN npm install towxml
+
 EXPOSE 8000
 CMD ["/entrypoint.sh"]
 
