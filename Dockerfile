@@ -61,23 +61,25 @@ RUN set -ex \
   && ln -s /opt/yarn-v$YARN_VERSION/bin/yarnpkg /usr/local/bin/yarnpkg \
   && rm yarn-v$YARN_VERSION.tar.gz.asc yarn-v$YARN_VERSION.tar.gz
 
-RUN apt-get update && apt-get install apt-transport-https -y && \
+RUN apt-get update && apt-get install apt-transport-https vim -y && \
     apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys D6BC243565B2087BC3F897C9277A7293F59E4889 && \
     echo "deb http://miktex.org/download/debian stretch universe" | tee /etc/apt/sources.list.d/miktex.list && \        
     apt-get update && \
-    apt-get install miktex perl netpbm -y
+    apt-get install miktex perl -y
 
 RUN initexmf --admin --force --mklinks && \
     mpm --admin --install amsfonts && \
     initexmf --admin --mkmaps && \
     initexmf --admin --update-fndb && \
     pip install --upgrade pip && \
-    pip install flask gunicorn pymysql pnglatex && \
+    pip install flask gunicorn pymysql && \
     npm install towxml && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 COPY entrypoint.sh /
-RUN  chmod +x /entrypoint.sh
+COPY l2p /usr/bin/
+RUN  chmod +x /entrypoint.sh && \
+     chmod +x /usr/bin/l2p
 
 ADD . /src
 WORKDIR /src
