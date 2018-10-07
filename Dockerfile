@@ -61,9 +61,9 @@ RUN set -ex \
   && ln -s /opt/yarn-v$YARN_VERSION/bin/yarnpkg /usr/local/bin/yarnpkg \
   && rm yarn-v$YARN_VERSION.tar.gz.asc yarn-v$YARN_VERSION.tar.gz
 
-RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys D6BC243565B2087BC3F897C9277A7293F59E4889 && \
-    echo "deb http://miktex.org/download/debian stretch universe" | tee /etc/apt/sources.list.d/miktex.list && \    
-    apt-get install apt-transport-https -y && \
+RUN apt-get update && apt-get install apt-transport-https -y && \
+    apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys D6BC243565B2087BC3F897C9277A7293F59E4889 && \
+    echo "deb http://miktex.org/download/debian stretch universe" | tee /etc/apt/sources.list.d/miktex.list && \        
     apt-get update && \
     apt-get install miktex perl netpbm -y
 
@@ -74,7 +74,8 @@ RUN initexmf --admin --force --mklinks && \
     pip install --upgrade pip && \
     pip install flask gunicorn pymysql pnglatex && \
     chmod +x /entrypoint.sh && \
-    npm install towxml
+    npm install towxml && \
+    apt-get clean
 
 COPY entrypoint.sh /
 
