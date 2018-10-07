@@ -77,7 +77,7 @@ RUN initexmf --admin --force --mklinks && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 COPY entrypoint.sh /
-RUN  chmod +x /entrypoint.sh && \
+RUN  chmod +x /entrypoint.sh
 
 ADD . /src
 WORKDIR /src
