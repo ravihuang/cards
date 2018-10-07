@@ -73,11 +73,11 @@ RUN initexmf --admin --force --mklinks && \
     initexmf --admin --update-fndb && \
     pip install --upgrade pip && \
     pip install flask gunicorn pymysql pnglatex && \
-    chmod +x /entrypoint.sh && \
     npm install towxml && \
-    apt-get clean
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
 COPY entrypoint.sh /
+RUN  chmod +x /entrypoint.sh && \
 
 ADD . /src
 WORKDIR /src
