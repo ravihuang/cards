@@ -76,16 +76,16 @@ RUN initexmf --admin --force --mklinks && \
     npm install towxml && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
-COPY entrypoint.sh /
-COPY l2p /usr/bin/
-RUN  chmod +x /entrypoint.sh && \
-     chmod +x /usr/bin/l2p
-
 ADD . /src
+
+RUN  mv /src/l2p /usr/bin/ && mv /src/tikz2png /usr/bin && \
+     chmod +x /src/entrypoint.sh && \
+     chmod +x /usr/bin/l2p && chmod +x /usr/bin/tikz2png
+
 WORKDIR /src
 VOLUME /src/db
 
 EXPOSE 8000
-CMD ["/entrypoint.sh"]
+CMD ["/src/entrypoint.sh"]
 
 
