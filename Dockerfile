@@ -80,7 +80,8 @@ ADD . /src
 
 RUN  mv /src/l2p /usr/bin/ && mv /src/tikz2png /usr/bin && \
      chmod +x /src/entrypoint.sh && \
-     chmod +x /usr/bin/l2p && chmod +x /usr/bin/tikz2png
+     chmod +x /usr/bin/l2p && chmod +x /usr/bin/tikz2png && \
+     tikz2png /src/example.tikz
 
 WORKDIR /src
 VOLUME /src/db

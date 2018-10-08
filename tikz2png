@@ -1,5 +1,5 @@
 #!/usr/bin/env python2
-
+#https://github.com/jeroenjanssens/tikz2pdf
 import os
 import re
 import sys
@@ -283,7 +283,6 @@ def main():
     logging.basicConfig(format=log_format, level=logging.INFO)
 
     for tikz_file, pdf_filename in zip(tikz_files, pdf_filenames):
-        print 1111,pdf_filename,tikz_file
         TikZ2PDF(tikz_file, pdf_filename, **args)
         prefix=pdf_filename.split(".")[0]
         subprocess.call(['convert','-flatten','-density','96','-quality','1000',pdf_filename,prefix+".png"])
